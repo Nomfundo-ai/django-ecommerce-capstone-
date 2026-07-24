@@ -147,7 +147,29 @@ docker run -p 8000:8000 --env-file .env grabmore-ecommerce
 ```
 
 A `.env` file for full functionality looks like:
+```
+DJANGO_SECRET_KEY=generate-your-own-random-secret
+DJANGO_DEBUG=False
+DJANGO_ALLOWED_HOSTS=yourdomain.com
+TWITTER_CONSUMER_KEY=your_key
+TWITTER_CONSUMER_SECRET=your_secret
+```
 
+Generate a Django secret key with:
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Twitter credentials are obtained by registering an application at
+https://developer.twitter.com/ — create a project, then an app, then copy
+the API key and API secret from the app's "Keys and tokens" tab. Both are
+optional; the site runs normally without them.
+
+No secrets are committed to this repository. Every credential is read from
+an environment variable with a safe placeholder default, so a reviewer can
+run the project immediately and add real values only if they want the
+optional email and Twitter features.
 ## Email
 
 By default, `DJANGO_EMAIL_BACKEND` is the console backend, so invoice and
