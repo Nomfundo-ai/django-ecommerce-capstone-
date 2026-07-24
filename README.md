@@ -170,6 +170,30 @@ No secrets are committed to this repository. Every credential is read from
 an environment variable with a safe placeholder default, so a reviewer can
 run the project immediately and add real values only if they want the
 optional email and Twitter features.
+
+## Documentation
+
+Sphinx documentation is generated from the project's docstrings and is
+committed under `docs/`. To read it, clone the repository and open
+`docs/_build/html/index.html` in a browser.
+
+To rebuild it after changing any docstrings:
+
+    cd docs
+    make html          # or .\make.bat html on Windows
+
+The `conf.py` sets up Django before autodoc runs, so the models and views
+import correctly during the build.
+
+## Repository branches
+
+- `main` — the complete, merged project
+- `docs` — docstrings and the Sphinx documentation
+- `container` — the Dockerfile and containerisation
+
+Both `docs` and `container` were branched from `main`, committed to
+separately, and then merged back into `main`.
+
 ## Email
 
 By default, `DJANGO_EMAIL_BACKEND` is the console backend, so invoice and
