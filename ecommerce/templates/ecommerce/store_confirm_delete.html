@@ -1,0 +1,13 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Delete store{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:480px;margin:0 auto;">
+    <h1>Delete "{{ store.name }}"?</h1>
+    <p class="muted">This will also delete all products in this store. This cannot be undone.</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="danger">Yes, delete</button>
+      <a class="button secondary" href="{% url 'ecommerce:my_stores' %}">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

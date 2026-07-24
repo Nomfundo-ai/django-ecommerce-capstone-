@@ -1,0 +1,29 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Your cart{% endblock %}
+{% block content %}
+  <h1>Your cart</h1>
+  <table>
+    <tr><th>Product</th><th>Quantity</th><th>Line total</th><th></th></tr>
+    {% for item in items %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>R{{ item.line_total }}</td>
+        <td>
+          <form method="post" action="{% url 'ecommerce:cart_remove' item.product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="danger">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" class="muted">Your cart is empty.</td></tr>
+    {% endfor %}
+  </table>
+  {% if items %}
+    <p style="margin-top:1rem;"><strong>Total: R{{ total }}</strong></p>
+    <a class="button" href="{% url 'ecommerce:checkout' %}">Proceed to checkout</a>
+  {% else %}
+    <a class="button" href="{% url 'ecommerce:product_browse' %}">Browse products</a>
+  {% endif %}
+{% endblock %}

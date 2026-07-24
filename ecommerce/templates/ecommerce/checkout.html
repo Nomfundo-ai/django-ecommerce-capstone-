@@ -1,0 +1,21 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+  <h1>Checkout</h1>
+  <table>
+    <tr><th>Product</th><th>Quantity</th><th>Line total</th></tr>
+    {% for item in items %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>R{{ item.line_total }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <p><strong>Total: R{{ total }}</strong></p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Place order</button>
+  </form>
+  <p class="muted">An invoice will be emailed to you once your order is placed.</p>
+{% endblock %}

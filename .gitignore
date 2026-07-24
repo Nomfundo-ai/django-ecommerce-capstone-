@@ -1,0 +1,41 @@
+﻿# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+virtualenv/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+/media/
+/staticfiles/
+
+# Environment secrets
+.env
+*.env
+.env.*
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Sphinx build cache only - generated HTML docs ARE committed
+docs/_build/doctrees/
+docs/_build/.doctrees/

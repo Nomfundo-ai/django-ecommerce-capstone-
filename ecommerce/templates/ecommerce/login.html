@@ -1,0 +1,20 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:420px;margin:0 auto;">
+    <h1>Log in</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <label for="{{ form.username.id_for_label }}">Username</label>
+      {{ form.username }}
+      <label for="{{ form.password.id_for_label }}">Password</label>
+      {{ form.password }}
+      <button type="submit">Log in</button>
+    </form>
+    <p class="muted">
+      <a href="{% url 'ecommerce:password_reset_request' %}">Forgot your password?</a><br>
+      No account yet? <a href="{% url 'ecommerce:register' %}">Register</a>
+    </p>
+  </div>
+{% endblock %}

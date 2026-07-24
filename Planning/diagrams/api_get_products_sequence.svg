@@ -1,0 +1,29 @@
+<svg viewBox="0 0 900 535" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="900" height="535" fill="#ffffff"/>
+<text x="450.0" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1b1b1b">API request: GET /api/stores/<id>/products/</text>
+<rect x="15.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="90.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Client (Postman)</text>
+<line x1="90.0" y1="84" x2="90.0" y2="505" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="255.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="330.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">API view</text>
+<line x1="330.0" y1="84" x2="330.0" y2="505" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="495.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="570.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Serializer</text>
+<line x1="570.0" y1="84" x2="570.0" y2="505" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="735.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="810.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Database</text>
+<line x1="810.0" y1="84" x2="810.0" y2="505" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#1b1b1b" /></marker></defs>
+<text x="210.0" y="112" text-anchor="middle" font-size="12" fill="#1b1b1b">GET /api/stores/3/products/</text>
+<line x1="90.0" y1="120" x2="330.0" y2="120" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="570.0" y="167" text-anchor="middle" font-size="12" fill="#1b1b1b">store.products.all()</text>
+<line x1="330.0" y1="175" x2="810.0" y2="175" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="570.0" y="222" text-anchor="middle" font-size="12" fill="#6b6b6b">return Product queryset</text>
+<line x1="810.0" y1="230" x2="330.0" y2="230" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+<text x="450.0" y="277" text-anchor="middle" font-size="12" fill="#1b1b1b">ProductSerializer(products, many=True)</text>
+<line x1="330.0" y1="285" x2="570.0" y2="285" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="450.0" y="332" text-anchor="middle" font-size="12" fill="#6b6b6b">return serialized data</text>
+<line x1="570.0" y1="340" x2="330.0" y2="340" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+<text x="210.0" y="387" text-anchor="middle" font-size="12" fill="#6b6b6b">200 OK (JSON or XML body)</text>
+<line x1="330.0" y1="395" x2="90.0" y2="395" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+</svg>

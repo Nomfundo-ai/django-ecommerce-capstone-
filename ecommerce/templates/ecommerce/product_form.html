@@ -1,0 +1,26 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}{{ action }} product{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:480px;margin:0 auto;">
+    <h1>{{ action }} product - {{ store.name }}</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="{{ form.name.id_for_label }}">Name</label>
+      {{ form.name }}
+      {{ form.name.errors }}
+      <label for="{{ form.description.id_for_label }}">Description</label>
+      {{ form.description }}
+      {{ form.description.errors }}
+      <label for="{{ form.price.id_for_label }}">Price (R)</label>
+      {{ form.price }}
+      {{ form.price.errors }}
+      <label for="{{ form.stock.id_for_label }}">Stock</label>
+      {{ form.stock }}
+      {{ form.stock.errors }}
+      <label for="{{ form.image.id_for_label }}">Image (optional)</label>
+      {{ form.image }}
+      {{ form.image.errors }}
+      <button type="submit">Save</button>
+    </form>
+  </div>
+{% endblock %}

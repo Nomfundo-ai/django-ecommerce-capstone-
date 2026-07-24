@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}eCommerce{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a class="brand" href="{% url 'ecommerce:home' %}">GrabMore eCommerce</a>
+      <a href="{% url 'ecommerce:product_browse' %}">Browse products</a>
+      {% if user.is_authenticated %}
+        {% if perms.ecommerce.add_store %}
+          <a href="{% url 'ecommerce:my_stores' %}">My stores</a>
+        {% endif %}
+        <a href="{% url 'ecommerce:my_orders' %}">My orders</a>
+        <a href="{% url 'ecommerce:cart_view' %}">Cart ({{ cart_item_count }})</a>
+      {% endif %}
+      <div class="spacer"></div>
+      {% if user.is_authenticated %}
+        <span class="muted">Hi, {{ user.username }}</span>
+        <form method="post" action="{% url 'ecommerce:logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="secondary">Log out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'ecommerce:login' %}">Log in</a>
+        <a class="button" href="{% url 'ecommerce:register' %}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="container">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

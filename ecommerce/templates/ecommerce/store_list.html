@@ -1,0 +1,26 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}My stores{% endblock %}
+{% block content %}
+  <h1>My stores</h1>
+  {% if perms.ecommerce.add_store %}
+    <a class="button" href="{% url 'ecommerce:store_create' %}">+ New store</a>
+  {% endif %}
+  <div class="grid" style="margin-top:1rem;">
+    {% for store in stores %}
+      <div class="card">
+        {% if store.logo %}
+          <img src="{{ store.logo.url }}" alt="{{ store.name }} logo" style="max-width:120px;border-radius:8px;display:block;margin-bottom:0.5rem;">
+        {% endif %}
+        <h3>{{ store.name }}</h3>
+        <p class="muted">{{ store.description|truncatewords:15 }}</p>
+        <p><a href="{% url 'ecommerce:store_products' store.id %}">Manage products</a></p>
+        <p>
+          <a href="{% url 'ecommerce:store_edit' store.id %}">Edit</a> ·
+          <a href="{% url 'ecommerce:store_delete' store.id %}">Delete</a>
+        </p>
+      </div>
+    {% empty %}
+      <p class="muted">You have not created a store yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}{{ store.name }} products{% endblock %}
+{% block content %}
+  <h1>{{ store.name }} - products</h1>
+  {% if perms.ecommerce.add_product %}
+    <a class="button" href="{% url 'ecommerce:product_create' store.id %}">+ New product</a>
+  {% endif %}
+  <table>
+    <tr><th>Name</th><th>Price</th><th>Stock</th><th></th></tr>
+    {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>R{{ product.price }}</td>
+        <td>{{ product.stock }}</td>
+        <td>
+          <a href="{% url 'ecommerce:product_edit' product.id %}">Edit</a> ·
+          <a href="{% url 'ecommerce:product_delete' product.id %}">Delete</a> ·
+          <a href="{% url 'ecommerce:product_detail' product.id %}">View</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" class="muted">No products yet.</td></tr>
+    {% endfor %}
+  </table>
+  <p style="margin-top:1rem;"><a href="{% url 'ecommerce:my_stores' %}">&larr; Back to my stores</a></p>
+{% endblock %}

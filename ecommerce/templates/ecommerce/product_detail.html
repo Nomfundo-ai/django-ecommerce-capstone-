@@ -1,0 +1,57 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>{{ product.name }}</h1>
+    <p class="muted">Sold by {{ product.store.name }}</p>
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:280px;border-radius:8px;display:block;margin-bottom:1rem;">
+    {% endif %}
+    <p>{{ product.description }}</p>
+    <p><strong>R{{ product.price }}</strong> &middot; {{ product.stock }} in stock</p>
+    {% if product.average_rating %}
+      <p>Average rating: {{ product.average_rating }} / 5</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'ecommerce:cart_add' product.id %}">
+        {% csrf_token %}
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" style="max-width:120px;">
+        <button type="submit">Add to cart</button>
+      </form>
+    {% else %}
+      <p class="muted"><a href="{% url 'ecommerce:login' %}?next={{ request.path }}">Log in</a> to add this to your cart.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+      <div style="border-bottom:1px solid #eee; padding:0.5rem 0;">
+        <strong>{{ review.user.username }}</strong> - {{ review.rating }}/5
+        {% if review.verified %}
+          <span class="badge verified">Verified purchase</span>
+        {% else %}
+          <span class="badge unverified">Unverified</span>
+        {% endif %}
+        <p>{{ review.comment }}</p>
+      </div>
+    {% empty %}
+      <p class="muted">No reviews yet.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated and perms.ecommerce.add_review %}
+      <h3>Leave a review</h3>
+      <form method="post" action="{% url 'ecommerce:add_review' product.id %}">
+        {% csrf_token %}
+        <label for="{{ review_form.rating.id_for_label }}">Rating</label>
+        {{ review_form.rating }}
+        <label for="{{ review_form.comment.id_for_label }}">Comment</label>
+        {{ review_form.comment }}
+        <button type="submit">Submit review</button>
+      </form>
+      <p class="muted">Reviews are automatically marked verified if you have purchased this product.</p>
+    {% endif %}
+  </div>
+{% endblock %}

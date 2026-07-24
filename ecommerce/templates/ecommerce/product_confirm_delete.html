@@ -1,0 +1,12 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Delete product{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:480px;margin:0 auto;">
+    <h1>Delete "{{ product.name }}"?</h1>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="danger">Yes, delete</button>
+      <a class="button secondary" href="{% url 'ecommerce:store_products' product.store.id %}">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

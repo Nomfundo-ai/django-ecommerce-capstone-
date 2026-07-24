@@ -1,0 +1,21 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1>Welcome to GrabMore</h1>
+    <p class="muted">Buy from independent vendors, or register as a vendor to open your own store.</p>
+  </div>
+
+  <h2>Newest products</h2>
+  <div class="grid">
+    {% for product in latest_products %}
+      <div class="card">
+        <h3><a href="{% url 'ecommerce:product_detail' product.id %}">{{ product.name }}</a></h3>
+        <p class="muted">{{ product.store.name }}</p>
+        <p>R{{ product.price }}</p>
+      </div>
+    {% empty %}
+      <p class="muted">No products yet - be the first vendor to add one!</p>
+    {% endfor %}
+  </div>
+{% endblock %}

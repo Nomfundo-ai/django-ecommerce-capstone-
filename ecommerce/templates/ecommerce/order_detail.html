@@ -1,0 +1,18 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block content %}
+  <h1>Order #{{ order.id }}</h1>
+  <p class="muted">Placed {{ order.created_at }}</p>
+  <table>
+    <tr><th>Product</th><th>Quantity</th><th>Price</th><th>Line total</th></tr>
+    {% for item in order.items.all %}
+      <tr>
+        <td>{{ item.product_name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>R{{ item.price }}</td>
+        <td>R{{ item.line_total }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <p><strong>Total: R{{ order.total }}</strong></p>
+{% endblock %}

@@ -1,0 +1,41 @@
+<svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="900" height="700" fill="#ffffff"/>
+<text x="450.0" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1b1b1b">API request: POST /api/stores/ (create store + tweet)</text>
+<rect x="15.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="90.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Client (Postman)</text>
+<line x1="90.0" y1="84" x2="90.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="159.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="234.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">API view</text>
+<line x1="234.0" y1="84" x2="234.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="303.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="378.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Auth/Permissions</text>
+<line x1="378.0" y1="84" x2="378.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="447.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="522.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Database</text>
+<line x1="522.0" y1="84" x2="522.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="591.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="666.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">Tweet singleton</text>
+<line x1="666.0" y1="84" x2="666.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<rect x="735.0" y="50" width="150" height="34" rx="6" fill="#2d6a4f" />
+<text x="810.0" y="72.0" text-anchor="middle" font-size="13" fill="#ffffff">X (Twitter) API</text>
+<line x1="810.0" y1="84" x2="810.0" y2="670" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="4,3" />
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#1b1b1b" /></marker></defs>
+<text x="162.0" y="112" text-anchor="middle" font-size="12" fill="#1b1b1b">POST /api/stores/ (Basic Auth + JSON body)</text>
+<line x1="90.0" y1="120" x2="234.0" y2="120" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="306.0" y="167" text-anchor="middle" font-size="12" fill="#1b1b1b">authenticate + has_perm('add_store')</text>
+<line x1="234.0" y1="175" x2="378.0" y2="175" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="306.0" y="222" text-anchor="middle" font-size="12" fill="#6b6b6b">authenticated vendor OK</text>
+<line x1="378.0" y1="230" x2="234.0" y2="230" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+<text x="378.0" y="277" text-anchor="middle" font-size="12" fill="#1b1b1b">StoreSerializer.save(vendor=request.user)</text>
+<line x1="234.0" y1="285" x2="522.0" y2="285" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="378.0" y="332" text-anchor="middle" font-size="12" fill="#6b6b6b">return new Store</text>
+<line x1="522.0" y1="340" x2="234.0" y2="340" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+<text x="450.0" y="387" text-anchor="middle" font-size="12" fill="#1b1b1b">make_tweet(store name + description)</text>
+<line x1="234.0" y1="395" x2="666.0" y2="395" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="738.0" y="442" text-anchor="middle" font-size="12" fill="#1b1b1b">POST /2/tweets (+ logo media, if any)</text>
+<line x1="666.0" y1="450" x2="810.0" y2="450" stroke="#1b1b1b" stroke-width="1.6"  marker-end="url(#arrow)" />
+<text x="738.0" y="497" text-anchor="middle" font-size="12" fill="#6b6b6b">return tweet JSON (or error, logged)</text>
+<line x1="810.0" y1="505" x2="666.0" y2="505" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+<text x="162.0" y="552" text-anchor="middle" font-size="12" fill="#6b6b6b">201 Created (serialized store)</text>
+<line x1="234.0" y1="560" x2="90.0" y2="560" stroke="#6b6b6b" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+</svg>
