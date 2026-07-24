@@ -1,0 +1,682 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecommerce.views &mdash; GrabMore eCommerce 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GrabMore eCommerce
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">ecommerce</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GrabMore eCommerce</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ecommerce.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecommerce.views</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">View functions for the eCommerce application.</span>
+
+<span class="sd">Covers four areas: user registration and authentication; vendor management</span>
+<span class="sd">of stores and products; buyer browsing, reviews, cart and checkout; and the</span>
+<span class="sd">forgotten-password reset flow.</span>
+
+<span class="sd">Vendor and buyer capabilities are separated using Django&#39;s permission</span>
+<span class="sd">framework, with ownership checks applied on top so that a vendor can only</span>
+<span class="sd">modify their own stores and products.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hashlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">sha1</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">messages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">authenticate</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">logout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">permission_required</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">PermissionDenied</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.forms</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LoginForm</span><span class="p">,</span>
+    <span class="n">PasswordResetRequestForm</span><span class="p">,</span>
+    <span class="n">ProductForm</span><span class="p">,</span>
+    <span class="n">RegisterForm</span><span class="p">,</span>
+    <span class="n">ReviewForm</span><span class="p">,</span>
+    <span class="n">SetNewPasswordForm</span><span class="p">,</span>
+    <span class="n">StoreForm</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">OrderItem</span><span class="p">,</span> <span class="n">Product</span><span class="p">,</span> <span class="n">ResetToken</span><span class="p">,</span> <span class="n">Review</span><span class="p">,</span> <span class="n">Store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">add_to_cart</span><span class="p">,</span>
+    <span class="n">announce_product</span><span class="p">,</span>
+    <span class="n">announce_store</span><span class="p">,</span>
+    <span class="n">build_invoice_email</span><span class="p">,</span>
+    <span class="n">build_password_reset_email</span><span class="p">,</span>
+    <span class="n">change_user_password</span><span class="p">,</span>
+    <span class="n">clear_cart</span><span class="p">,</span>
+    <span class="n">generate_reset_url</span><span class="p">,</span>
+    <span class="n">get_cart</span><span class="p">,</span>
+    <span class="n">get_cart_items</span><span class="p">,</span>
+    <span class="n">remove_from_cart</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Home / registration / authentication</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="home">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.home">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render the landing page with the eight most recently added products.&quot;&quot;&quot;</span>
+    <span class="n">latest_products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;store&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-created_at&quot;</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/home.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;latest_products&quot;</span><span class="p">:</span> <span class="n">latest_products</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="register_user">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.register_user">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_user</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Register a new buyer or vendor account.</span>
+
+<span class="sd">    Creates the user via ``create_user()`` so the password is hashed, assigns</span>
+<span class="sd">    them to the Group matching their chosen account type, and logs them in.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request (HttpRequest): The incoming request.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: The registration form, or a redirect home on success.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:home&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">RegisterForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="c1"># RegisterForm is a plain Form (not a ModelForm) because the</span>
+            <span class="c1"># password has to go through create_user() so Django hashes it,</span>
+            <span class="c1"># rather than being saved as plain text by a ModelForm.</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+
+            <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
+                <span class="n">email</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">group_name</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;account_type&quot;</span><span class="p">]</span>
+            <span class="n">group</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">group_name</span><span class="p">)</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Welcome! Your account has been created.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:home&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">RegisterForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/register.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="login_user">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.login_user">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">login_user</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Authenticate a user and start a session.</span>
+
+<span class="sd">    Honours a ``next`` parameter so users are returned to the page they were</span>
+<span class="sd">    trying to reach before being asked to log in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:home&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">LoginForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span>
+                <span class="n">request</span><span class="p">,</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+                <span class="n">next_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">next_url</span> <span class="ow">or</span> <span class="s2">&quot;ecommerce:home&quot;</span><span class="p">)</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Incorrect username or password.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">LoginForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/login.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="logout_user">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.logout_user">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">logout_user</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">logout</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;You have been logged out.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:home&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Vendor: store management</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="my_stores">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.my_stores">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_stores</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">stores</span> <span class="o">=</span> <span class="n">Store</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">vendor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/store_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;stores&quot;</span><span class="p">:</span> <span class="n">stores</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="store_create">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.store_create">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.add_store&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">StoreForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">store</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">vendor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">announce_store</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Store &#39;</span><span class="si">{</span><span class="n">store</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; created.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:my_stores&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">StoreForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/store_form.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;Create&quot;</span><span class="p">})</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_owned_store</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch a store, ensuring the requesting user owns it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request (HttpRequest): The incoming request.</span>
+<span class="sd">        store_id (int): Primary key of the store.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Store: The requested store.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Http404: If no store with that primary key exists.</span>
+<span class="sd">        PermissionDenied: If the store belongs to a different vendor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Store</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">store_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">vendor</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PermissionDenied</span><span class="p">(</span><span class="s2">&quot;You do not own this store.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">store</span>
+
+
+<div class="viewcode-block" id="store_edit">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.store_edit">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.change_store&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">):</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">_get_owned_store</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">StoreForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Store updated.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:my_stores&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">StoreForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/store_form.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;Edit&quot;</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="store_delete">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.store_delete">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.delete_store&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">):</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">_get_owned_store</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">store</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Store deleted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:my_stores&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/store_confirm_delete.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="n">store</span><span class="p">})</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Vendor: product management</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="store_products">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.store_products">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.view_product&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">store_products</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">):</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">_get_owned_store</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">products</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/product_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="n">store</span><span class="p">,</span> <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="n">products</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="product_create">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.product_create">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.add_product&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">product_create</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">):</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">_get_owned_store</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">store_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ProductForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">product</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">product</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">store</span>
+            <span class="n">product</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">announce_product</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Product &#39;</span><span class="si">{</span><span class="n">product</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; added.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:store_products&quot;</span><span class="p">,</span> <span class="n">store_id</span><span class="o">=</span><span class="n">store</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ProductForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/product_form.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="n">store</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;Add&quot;</span><span class="p">})</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_owned_product</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">product_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">product</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">vendor</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PermissionDenied</span><span class="p">(</span><span class="s2">&quot;You do not own this product.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">product</span>
+
+
+<div class="viewcode-block" id="product_edit">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.product_edit">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.change_product&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">product_edit</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">_get_owned_product</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ProductForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">product</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Product updated.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:store_products&quot;</span><span class="p">,</span> <span class="n">store_id</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ProductForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">product</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/product_form.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">store</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;Edit&quot;</span><span class="p">}</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="product_delete">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.product_delete">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.delete_product&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">product_delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">_get_owned_product</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+    <span class="n">store_id</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">product</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Product deleted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:store_products&quot;</span><span class="p">,</span> <span class="n">store_id</span><span class="o">=</span><span class="n">store_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/product_confirm_delete.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;product&quot;</span><span class="p">:</span> <span class="n">product</span><span class="p">})</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Buyer: browsing products, viewing a product + reviews</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="product_browse">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.product_browse">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">product_browse</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;store&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">products</span> <span class="o">=</span> <span class="n">products</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/product_browse.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="n">products</span><span class="p">,</span> <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="product_detail">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.product_detail">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;store&quot;</span><span class="p">),</span> <span class="n">pk</span><span class="o">=</span><span class="n">product_id</span><span class="p">)</span>
+    <span class="n">reviews</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">reviews</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">review_form</span> <span class="o">=</span> <span class="n">ReviewForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span>
+        <span class="s2">&quot;ecommerce/product_detail.html&quot;</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;product&quot;</span><span class="p">:</span> <span class="n">product</span><span class="p">,</span> <span class="s2">&quot;reviews&quot;</span><span class="p">:</span> <span class="n">reviews</span><span class="p">,</span> <span class="s2">&quot;review_form&quot;</span><span class="p">:</span> <span class="n">review_form</span><span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_review">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.add_review">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@permission_required</span><span class="p">(</span><span class="s2">&quot;ecommerce.add_review&quot;</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_review</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a buyer&#39;s review of a product.</span>
+
+<span class="sd">    The review is flagged as verified only when the reviewing user has an</span>
+<span class="sd">    existing order containing this product; otherwise it is stored as</span>
+<span class="sd">    unverified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">product_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ReviewForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">has_purchased</span> <span class="o">=</span> <span class="n">OrderItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">order__buyer</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="n">product</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+            <span class="n">review</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">review</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="n">product</span>
+            <span class="n">review</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">review</span><span class="o">.</span><span class="n">verified</span> <span class="o">=</span> <span class="n">has_purchased</span>
+            <span class="n">review</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                <span class="n">request</span><span class="p">,</span>
+                <span class="s2">&quot;Review submitted as verified (you purchased this product).&quot;</span>
+                <span class="k">if</span> <span class="n">has_purchased</span>
+                <span class="k">else</span> <span class="s2">&quot;Review submitted as unverified (no purchase found for this product).&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:product_detail&quot;</span><span class="p">,</span> <span class="n">product_id</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Cart (session-based) and checkout</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="cart_view">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.cart_view">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cart_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">get_cart_items</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;line_total&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/cart.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="n">items</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="cart_add">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.cart_add">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cart_add</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">product_id</span><span class="p">)</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">quantity</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">quantity</span><span class="p">))</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">quantity</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">add_to_cart</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">quantity</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Added </span><span class="si">{</span><span class="n">quantity</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">product</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> to your cart.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:product_detail&quot;</span><span class="p">,</span> <span class="n">product_id</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cart_remove">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.cart_remove">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cart_remove</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="n">remove_from_cart</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Item removed from your cart.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:cart_view&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="checkout">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.checkout">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the session cart into a persisted Order.</span>
+
+<span class="sd">    Runs inside a database transaction so that the order, its line items and</span>
+<span class="sd">    the stock adjustments either all succeed or all roll back. Quantities are</span>
+<span class="sd">    capped at available stock, prices and names are snapshotted onto each</span>
+<span class="sd">    OrderItem, the cart is cleared, and an invoice email is sent.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: The checkout page, or a redirect to the new order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">get_cart_items</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Your cart is empty.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:product_browse&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">transaction</span><span class="o">.</span><span class="n">atomic</span><span class="p">():</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">buyer</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;product&quot;</span><span class="p">]</span>
+<span class="c1"># Never sell more units than the vendor has in stock.</span>
+                <span class="n">quantity</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;quantity&quot;</span><span class="p">],</span> <span class="n">product</span><span class="o">.</span><span class="n">stock</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">quantity</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">OrderItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                    <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+                    <span class="n">product</span><span class="o">=</span><span class="n">product</span><span class="p">,</span>
+                    <span class="n">product_name</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">quantity</span><span class="o">=</span><span class="n">quantity</span><span class="p">,</span>
+                    <span class="n">price</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="c1"># Reduce stock, but never below zero.</span>
+                <span class="n">product</span><span class="o">.</span><span class="n">stock</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">product</span><span class="o">.</span><span class="n">stock</span> <span class="o">-</span> <span class="n">quantity</span><span class="p">)</span>
+                <span class="n">product</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span>
+            <span class="n">order</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">total</span>
+            <span class="n">order</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">clear_cart</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="n">email</span> <span class="o">=</span> <span class="n">build_invoice_email</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+        <span class="n">email</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Order #</span><span class="si">{</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> placed! An invoice has been emailed to you.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:order_detail&quot;</span><span class="p">,</span> <span class="n">order_id</span><span class="o">=</span><span class="n">order</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;line_total&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/checkout.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="n">items</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="order_detail">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.order_detail">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">order_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">order_id</span><span class="p">):</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Order</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">order_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">order</span><span class="o">.</span><span class="n">buyer</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PermissionDenied</span><span class="p">(</span><span class="s2">&quot;You do not have access to this order.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/order_detail.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="n">order</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="my_orders">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.my_orders">[docs]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_orders</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">orders</span> <span class="o">=</span> <span class="n">Order</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">buyer</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/order_list.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;orders&quot;</span><span class="p">:</span> <span class="n">orders</span><span class="p">})</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Forgotten password</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="password_reset_request">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.password_reset_request">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">password_reset_request</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Email a password reset link to a registered address.</span>
+
+<span class="sd">    The same confirmation message is shown whether or not the address matches</span>
+<span class="sd">    an account, so the page cannot be used to discover which emails are</span>
+<span class="sd">    registered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PasswordResetRequestForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+
+            <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+            <span class="c1"># Always show the same confirmation message, whether or not the</span>
+            <span class="c1"># email matched an account, so we do not leak which addresses</span>
+            <span class="c1"># are registered.</span>
+            <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="n">generate_reset_url</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">build_password_reset_email</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                <span class="n">request</span><span class="p">,</span> <span class="s2">&quot;If that email address is registered, a reset link has been sent.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:login&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">PasswordResetRequestForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/password_reset_request.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="password_reset_confirm">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.password_reset_confirm">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">password_reset_confirm</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate a reset token from an emailed link.</span>
+
+<span class="sd">    The token is hashed before lookup, since only the hash is stored. Expired</span>
+<span class="sd">    tokens are deleted. A valid token is held in the session for the</span>
+<span class="sd">    subsequent password change step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hashed</span> <span class="o">=</span> <span class="n">sha1</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">reset_token</span> <span class="o">=</span> <span class="n">ResetToken</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">hashed</span><span class="p">,</span> <span class="n">used</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">reset_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reset_token</span><span class="o">.</span><span class="n">expiry_date</span> <span class="o">&lt;</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">():</span>
+            <span class="n">reset_token</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;password_reset_user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reset_token</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;password_reset_token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">token</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;This password reset link is invalid or has expired.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:password_reset_request&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/password_reset_confirm.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="password_reset_do">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.views.password_reset_do">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">password_reset_do</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password_reset_user&quot;</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password_reset_token&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Your password reset session has expired. Please request a new link.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:password_reset_request&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SetNewPasswordForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">change_user_password</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">])</span>
+            <span class="n">ResetToken</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">sha1</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;password_reset_user&quot;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;password_reset_token&quot;</span><span class="p">]</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Your password has been changed. Please log in.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;ecommerce:login&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SetNewPasswordForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;ecommerce/password_reset_do.html&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nomfundo Shabangu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

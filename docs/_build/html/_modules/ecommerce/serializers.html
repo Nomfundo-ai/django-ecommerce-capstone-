@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecommerce.serializers &mdash; GrabMore eCommerce 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GrabMore eCommerce
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">ecommerce</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GrabMore eCommerce</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ecommerce.serializers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecommerce.serializers</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Product</span><span class="p">,</span> <span class="n">Review</span><span class="p">,</span> <span class="n">Store</span>
+
+
+<div class="viewcode-block" id="StoreSerializer">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.StoreSerializer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StoreSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serialises a Store for the API.</span>
+
+<span class="sd">    vendor/vendor_username are read-only: the vendor is always taken from</span>
+<span class="sd">    the authenticated request user in the view rather than trusted from</span>
+<span class="sd">    the request body, so a vendor can never create a store &quot;on behalf of&quot;</span>
+<span class="sd">    another user by tampering with the payload.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">vendor</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;vendor.id&quot;</span><span class="p">)</span>
+    <span class="n">vendor_username</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;vendor.username&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StoreSerializer.Meta">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.StoreSerializer.Meta">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Store</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;vendor&quot;</span><span class="p">,</span> <span class="s2">&quot;vendor_username&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;logo&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">]</span>
+        <span class="n">read_only_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;vendor&quot;</span><span class="p">,</span> <span class="s2">&quot;vendor_username&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ProductSerializer">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.ProductSerializer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProductSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serialises a Product for the API. store/store_name are read-only for</span>
+<span class="sd">    the same reason vendor is read-only on StoreSerializer - the store is</span>
+<span class="sd">    taken from the URL and ownership is checked in the view.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">store_name</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;store.name&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ProductSerializer.Meta">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.ProductSerializer.Meta">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Product</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="s2">&quot;store_name&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span> <span class="s2">&quot;stock&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">]</span>
+        <span class="n">read_only_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="s2">&quot;store_name&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ReviewSerializer">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.ReviewSerializer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReviewSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read-only serialiser for reviews - reviews are only ever created via the website, not the API.&quot;&quot;&quot;</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;user.username&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ReviewSerializer.Meta">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.serializers.ReviewSerializer.Meta">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Review</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;product&quot;</span><span class="p">,</span> <span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;verified&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">]</span>
+        <span class="n">read_only_fields</span> <span class="o">=</span> <span class="n">fields</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nomfundo Shabangu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

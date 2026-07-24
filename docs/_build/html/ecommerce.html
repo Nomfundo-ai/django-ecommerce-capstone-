@@ -1,0 +1,1748 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecommerce package &mdash; GrabMore eCommerce 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ecommerce.functions package" href="ecommerce.functions.html" />
+    <link rel="prev" title="ecommerce" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GrabMore eCommerce
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ecommerce</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ecommerce package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ecommerce.functions.html">ecommerce.functions package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.admin">ecommerce.admin module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.OrderAdmin"><code class="docutils literal notranslate"><span class="pre">OrderAdmin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.OrderItemInline"><code class="docutils literal notranslate"><span class="pre">OrderItemInline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.ProductAdmin"><code class="docutils literal notranslate"><span class="pre">ProductAdmin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.ResetTokenAdmin"><code class="docutils literal notranslate"><span class="pre">ResetTokenAdmin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.ReviewAdmin"><code class="docutils literal notranslate"><span class="pre">ReviewAdmin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.admin.StoreAdmin"><code class="docutils literal notranslate"><span class="pre">StoreAdmin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.api_urls">ecommerce.api_urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.api_views">ecommerce.api_views module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#endpoints">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.api_views.product_list"><code class="docutils literal notranslate"><span class="pre">product_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.api_views.product_reviews"><code class="docutils literal notranslate"><span class="pre">product_reviews()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.api_views.store_list_create"><code class="docutils literal notranslate"><span class="pre">store_list_create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.api_views.store_product_list_create"><code class="docutils literal notranslate"><span class="pre">store_product_list_create()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.apps">ecommerce.apps module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.apps.EcommerceConfig"><code class="docutils literal notranslate"><span class="pre">EcommerceConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.apps.create_default_groups"><code class="docutils literal notranslate"><span class="pre">create_default_groups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.context_processors">ecommerce.context_processors module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.context_processors.cart_summary"><code class="docutils literal notranslate"><span class="pre">cart_summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.forms">ecommerce.forms module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.LoginForm"><code class="docutils literal notranslate"><span class="pre">LoginForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.PasswordResetRequestForm"><code class="docutils literal notranslate"><span class="pre">PasswordResetRequestForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.ProductForm"><code class="docutils literal notranslate"><span class="pre">ProductForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.RegisterForm"><code class="docutils literal notranslate"><span class="pre">RegisterForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.ReviewForm"><code class="docutils literal notranslate"><span class="pre">ReviewForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.SetNewPasswordForm"><code class="docutils literal notranslate"><span class="pre">SetNewPasswordForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.forms.StoreForm"><code class="docutils literal notranslate"><span class="pre">StoreForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.models">ecommerce.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.Order"><code class="docutils literal notranslate"><span class="pre">Order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.OrderItem"><code class="docutils literal notranslate"><span class="pre">OrderItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.Product"><code class="docutils literal notranslate"><span class="pre">Product</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.ResetToken"><code class="docutils literal notranslate"><span class="pre">ResetToken</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.Review"><code class="docutils literal notranslate"><span class="pre">Review</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.models.Store"><code class="docutils literal notranslate"><span class="pre">Store</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.serializers">ecommerce.serializers module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.serializers.ProductSerializer"><code class="docutils literal notranslate"><span class="pre">ProductSerializer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.serializers.ReviewSerializer"><code class="docutils literal notranslate"><span class="pre">ReviewSerializer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.serializers.StoreSerializer"><code class="docutils literal notranslate"><span class="pre">StoreSerializer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.tests">ecommerce.tests module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.urls">ecommerce.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.utils">ecommerce.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.add_to_cart"><code class="docutils literal notranslate"><span class="pre">add_to_cart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.announce_product"><code class="docutils literal notranslate"><span class="pre">announce_product()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.announce_store"><code class="docutils literal notranslate"><span class="pre">announce_store()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.build_invoice_email"><code class="docutils literal notranslate"><span class="pre">build_invoice_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.build_password_reset_email"><code class="docutils literal notranslate"><span class="pre">build_password_reset_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.change_user_password"><code class="docutils literal notranslate"><span class="pre">change_user_password()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.clear_cart"><code class="docutils literal notranslate"><span class="pre">clear_cart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.generate_reset_url"><code class="docutils literal notranslate"><span class="pre">generate_reset_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.get_cart"><code class="docutils literal notranslate"><span class="pre">get_cart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.get_cart_items"><code class="docutils literal notranslate"><span class="pre">get_cart_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.utils.remove_from_cart"><code class="docutils literal notranslate"><span class="pre">remove_from_cart()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce.views">ecommerce.views module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.add_review"><code class="docutils literal notranslate"><span class="pre">add_review()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.cart_add"><code class="docutils literal notranslate"><span class="pre">cart_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.cart_remove"><code class="docutils literal notranslate"><span class="pre">cart_remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.cart_view"><code class="docutils literal notranslate"><span class="pre">cart_view()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.checkout"><code class="docutils literal notranslate"><span class="pre">checkout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.home"><code class="docutils literal notranslate"><span class="pre">home()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.login_user"><code class="docutils literal notranslate"><span class="pre">login_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.logout_user"><code class="docutils literal notranslate"><span class="pre">logout_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.my_orders"><code class="docutils literal notranslate"><span class="pre">my_orders()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.my_stores"><code class="docutils literal notranslate"><span class="pre">my_stores()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.order_detail"><code class="docutils literal notranslate"><span class="pre">order_detail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.password_reset_confirm"><code class="docutils literal notranslate"><span class="pre">password_reset_confirm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.password_reset_do"><code class="docutils literal notranslate"><span class="pre">password_reset_do()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.password_reset_request"><code class="docutils literal notranslate"><span class="pre">password_reset_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.product_browse"><code class="docutils literal notranslate"><span class="pre">product_browse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.product_create"><code class="docutils literal notranslate"><span class="pre">product_create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.product_delete"><code class="docutils literal notranslate"><span class="pre">product_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.product_detail"><code class="docutils literal notranslate"><span class="pre">product_detail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.product_edit"><code class="docutils literal notranslate"><span class="pre">product_edit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.register_user"><code class="docutils literal notranslate"><span class="pre">register_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.store_create"><code class="docutils literal notranslate"><span class="pre">store_create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.store_delete"><code class="docutils literal notranslate"><span class="pre">store_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.store_edit"><code class="docutils literal notranslate"><span class="pre">store_edit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ecommerce.views.store_products"><code class="docutils literal notranslate"><span class="pre">store_products()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ecommerce">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GrabMore eCommerce</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">ecommerce</a></li>
+      <li class="breadcrumb-item active">ecommerce package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ecommerce.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ecommerce-package">
+<h1>ecommerce package<a class="headerlink" href="#ecommerce-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ecommerce.functions.html">ecommerce.functions package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ecommerce.functions.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecommerce.functions.html#module-ecommerce.functions.tweet">ecommerce.functions.tweet module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ecommerce.functions.html#ecommerce.functions.tweet.Tweet"><code class="docutils literal notranslate"><span class="pre">Tweet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ecommerce.functions.html#ecommerce.functions.tweet.Tweet.authenticate"><code class="docutils literal notranslate"><span class="pre">Tweet.authenticate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecommerce.functions.html#ecommerce.functions.tweet.Tweet.make_tweet"><code class="docutils literal notranslate"><span class="pre">Tweet.make_tweet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecommerce.functions.html#ecommerce.functions.tweet.Tweet.upload_media"><code class="docutils literal notranslate"><span class="pre">Tweet.upload_media()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ecommerce.functions.html#module-ecommerce.functions">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-ecommerce.admin">
+<span id="ecommerce-admin-module"></span><h2>ecommerce.admin module<a class="headerlink" href="#module-ecommerce.admin" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">OrderAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#OrderAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.OrderAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderAdmin.inlines">
+<span class="sig-name descname"><span class="pre">inlines</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;class</span> <span class="pre">'ecommerce.admin.OrderItemInline'&gt;]</span></span><a class="headerlink" href="#ecommerce.admin.OrderAdmin.inlines" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('id',</span> <span class="pre">'buyer',</span> <span class="pre">'total',</span> <span class="pre">'created_at')</span></span><a class="headerlink" href="#ecommerce.admin.OrderAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderAdmin.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.OrderAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderItemInline">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">OrderItemInline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#OrderItemInline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.OrderItemInline" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TabularInline</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderItemInline.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#ecommerce.admin.OrderItemInline.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderItemInline.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.OrderItemInline.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.OrderItemInline.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.admin.OrderItemInline.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.OrderItem" title="ecommerce.models.OrderItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderItem</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.ProductAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">ProductAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#ProductAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.ProductAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ProductAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'store',</span> <span class="pre">'price',</span> <span class="pre">'stock',</span> <span class="pre">'created_at')</span></span><a class="headerlink" href="#ecommerce.admin.ProductAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ProductAdmin.list_filter">
+<span class="sig-name descname"><span class="pre">list_filter</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('store',)</span></span><a class="headerlink" href="#ecommerce.admin.ProductAdmin.list_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.ProductAdmin.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.ProductAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ProductAdmin.search_fields">
+<span class="sig-name descname"><span class="pre">search_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',)</span></span><a class="headerlink" href="#ecommerce.admin.ProductAdmin.search_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.ResetTokenAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">ResetTokenAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#ResetTokenAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.ResetTokenAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ResetTokenAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('user',</span> <span class="pre">'expiry_date',</span> <span class="pre">'used')</span></span><a class="headerlink" href="#ecommerce.admin.ResetTokenAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.ResetTokenAdmin.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.ResetTokenAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.ReviewAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">ReviewAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#ReviewAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.ReviewAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ReviewAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('product',</span> <span class="pre">'user',</span> <span class="pre">'rating',</span> <span class="pre">'verified',</span> <span class="pre">'created_at')</span></span><a class="headerlink" href="#ecommerce.admin.ReviewAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.ReviewAdmin.list_filter">
+<span class="sig-name descname"><span class="pre">list_filter</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('verified',</span> <span class="pre">'rating')</span></span><a class="headerlink" href="#ecommerce.admin.ReviewAdmin.list_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.ReviewAdmin.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.ReviewAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.admin.StoreAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.admin.</span></span><span class="sig-name descname"><span class="pre">StoreAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/admin.html#StoreAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.admin.StoreAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.StoreAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'vendor',</span> <span class="pre">'created_at')</span></span><a class="headerlink" href="#ecommerce.admin.StoreAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.admin.StoreAdmin.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.admin.StoreAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.admin.StoreAdmin.search_fields">
+<span class="sig-name descname"><span class="pre">search_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('name',</span> <span class="pre">'vendor__username')</span></span><a class="headerlink" href="#ecommerce.admin.StoreAdmin.search_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.api_urls">
+<span id="ecommerce-api-urls-module"></span><h2>ecommerce.api_urls module<a class="headerlink" href="#module-ecommerce.api_urls" title="Link to this heading"></a></h2>
+</section>
+<section id="module-ecommerce.api_views">
+<span id="ecommerce-api-views-module"></span><h2>ecommerce.api_views module<a class="headerlink" href="#module-ecommerce.api_views" title="Link to this heading"></a></h2>
+<p>The RESTful web API for the eCommerce service (Part 2, practical task 1).</p>
+<section id="endpoints">
+<h3>Endpoints<a class="headerlink" href="#endpoints" title="Link to this heading"></a></h3>
+<p>GET  /api/stores/                       list all stores (optionally ?vendor=&lt;id&gt;)
+POST /api/stores/                       create a store (authenticated vendor)
+GET  /api/stores/&lt;store_id&gt;/products/   list a store’s products
+POST /api/stores/&lt;store_id&gt;/products/   add a product to a store (the owning vendor only)
+GET  /api/products/                     list all products (optionally ?store=&lt;id&gt;)
+GET  /api/products/&lt;product_id&gt;/reviews/  list a product’s reviews</p>
+<p>Every endpoint supports both JSON and XML representations (see
+REST_FRAMEWORK[“DEFAULT_RENDERER_CLASSES”] in settings.py) - request one or
+the other with a standard <cite>Accept</cite> header, or a <cite>?format=json</cite> / <cite>?format=xml</cite>
+query string.</p>
+<p>GET endpoints are open to anyone (buyers and vendors alike, per the task
+brief); POST endpoints require authentication (Basic auth or an existing
+logged-in session) <em>and</em> the correct Django permission <em>and</em> - for
+products - ownership of the parent store, mirroring the two-layer checks
+used by the equivalent website views in views.py.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.api_views.product_list">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.api_views.</span></span><span class="sig-name descname"><span class="pre">product_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/api_views.html#product_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.api_views.product_list" title="Link to this definition"></a></dt>
+<dd><p>List every product, optionally filtered to a single store with ?store=&lt;id&gt;.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.api_views.product_reviews">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.api_views.</span></span><span class="sig-name descname"><span class="pre">product_reviews</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/api_views.html#product_reviews"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.api_views.product_reviews" title="Link to this definition"></a></dt>
+<dd><p>List every review left for a single product.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.api_views.store_list_create">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.api_views.</span></span><span class="sig-name descname"><span class="pre">store_list_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/api_views.html#store_list_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.api_views.store_list_create" title="Link to this definition"></a></dt>
+<dd><p>List every store, or create a new one for the authenticated vendor.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.api_views.store_product_list_create">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.api_views.</span></span><span class="sig-name descname"><span class="pre">store_product_list_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/api_views.html#store_product_list_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.api_views.store_product_list_create" title="Link to this definition"></a></dt>
+<dd><p>List a store’s products, or add a new product to it (the owning vendor only).</p>
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.apps">
+<span id="ecommerce-apps-module"></span><h2>ecommerce.apps module<a class="headerlink" href="#module-ecommerce.apps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.apps.EcommerceConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.apps.</span></span><span class="sig-name descname"><span class="pre">EcommerceConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/apps.html#EcommerceConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.apps.EcommerceConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.apps.EcommerceConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></span><a class="headerlink" href="#ecommerce.apps.EcommerceConfig.default_auto_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.apps.EcommerceConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ecommerce'</span></span><a class="headerlink" href="#ecommerce.apps.EcommerceConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.apps.EcommerceConfig.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/apps.html#EcommerceConfig.ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.apps.EcommerceConfig.ready" title="Link to this definition"></a></dt>
+<dd><p>Override this method in subclasses to run code when Django starts.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.apps.create_default_groups">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.apps.</span></span><span class="sig-name descname"><span class="pre">create_default_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/apps.html#create_default_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.apps.create_default_groups" title="Link to this definition"></a></dt>
+<dd><p>Set up the ‘Vendors’ and ‘Buyers’ groups with sensible default
+permissions the first time migrations run, so that new installs of
+this project have working authorisation out of the box.</p>
+<p>Vendors get full add/change/delete/view permissions on Store and
+Product (their inventory). Buyers get view permission on products and
+add permission on reviews. Permissions are only a flag - views still
+check request.user.has_perm(…) before allowing an action, and
+ownership is always re-checked (a vendor may only edit their own
+stores/products).</p>
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.context_processors">
+<span id="ecommerce-context-processors-module"></span><h2>ecommerce.context_processors module<a class="headerlink" href="#module-ecommerce.context_processors" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.context_processors.cart_summary">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.context_processors.</span></span><span class="sig-name descname"><span class="pre">cart_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/context_processors.html#cart_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.context_processors.cart_summary" title="Link to this definition"></a></dt>
+<dd><p>Makes the number of items currently in the session cart available to
+every template (used for the “Cart (3)” link in the nav bar), without
+every view having to pass it in explicitly.</p>
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.forms">
+<span id="ecommerce-forms-module"></span><h2>ecommerce.forms module<a class="headerlink" href="#module-ecommerce.forms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.LoginForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">LoginForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#LoginForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.LoginForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.LoginForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.LoginForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.LoginForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.LoginForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.LoginForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.LoginForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.PasswordResetRequestForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">PasswordResetRequestForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#PasswordResetRequestForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.PasswordResetRequestForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.PasswordResetRequestForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.PasswordResetRequestForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.PasswordResetRequestForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.PasswordResetRequestForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.PasswordResetRequestForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.PasswordResetRequestForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">ProductForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#ProductForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.ProductForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/forms.html#ProductForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.ProductForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['name',</span> <span class="pre">'description',</span> <span class="pre">'price',</span> <span class="pre">'stock',</span> <span class="pre">'image']</span></span><a class="headerlink" href="#ecommerce.forms.ProductForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.forms.ProductForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Product" title="ecommerce.models.Product"><code class="xref py py-class docutils literal notranslate"><span class="pre">Product</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'image':</span> <span class="pre">&lt;django.forms.fields.ImageField</span> <span class="pre">object&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'price':</span> <span class="pre">&lt;django.forms.fields.DecimalField</span> <span class="pre">object&gt;,</span> <span class="pre">'stock':</span> <span class="pre">&lt;django.forms.fields.IntegerField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.ProductForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#ecommerce.forms.ProductForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.ProductForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.ProductForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">RegisterForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#RegisterForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.RegisterForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<p>Registration form used for both buyers and vendors (see account_type).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_type':</span> <span class="pre">&lt;django.forms.fields.ChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;,</span> <span class="pre">'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password_confirm':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.RegisterForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#RegisterForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.RegisterForm.clean" title="Link to this definition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm.clean_username">
+<span class="sig-name descname"><span class="pre">clean_username</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#RegisterForm.clean_username"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.RegisterForm.clean_username" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'account_type':</span> <span class="pre">&lt;django.forms.fields.ChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'email':</span> <span class="pre">&lt;django.forms.fields.EmailField</span> <span class="pre">object&gt;,</span> <span class="pre">'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password_confirm':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'username':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.RegisterForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.RegisterForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.RegisterForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">ReviewForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#ReviewForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.ReviewForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/forms.html#ReviewForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.ReviewForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['rating',</span> <span class="pre">'comment']</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Review" title="ecommerce.models.Review"><code class="xref py py-class docutils literal notranslate"><span class="pre">Review</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'rating':</span> <span class="pre">&lt;django.forms.widgets.Select</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'comment':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'rating':</span> <span class="pre">&lt;django.forms.fields.IntegerField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.ReviewForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.ReviewForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.SetNewPasswordForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">SetNewPasswordForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#SetNewPasswordForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.SetNewPasswordForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Form</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.SetNewPasswordForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password_confirm':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.SetNewPasswordForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.forms.SetNewPasswordForm.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#SetNewPasswordForm.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.SetNewPasswordForm.clean" title="Link to this definition"></a></dt>
+<dd><p>Hook for doing any extra form-wide cleaning after Field.clean() has been
+called on every field. Any ValidationError raised by this method will
+not be associated with a particular field; it will have a special-case
+association with the field named ‘__all__’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.SetNewPasswordForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'password':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'password_confirm':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.SetNewPasswordForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.SetNewPasswordForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.SetNewPasswordForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.forms.</span></span><span class="sig-name descname"><span class="pre">StoreForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/forms.html#StoreForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.StoreForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/forms.html#StoreForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.forms.StoreForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['name',</span> <span class="pre">'description',</span> <span class="pre">'logo']</span></span><a class="headerlink" href="#ecommerce.forms.StoreForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.forms.StoreForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Store" title="ecommerce.models.Store"><code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'logo':</span> <span class="pre">&lt;django.forms.fields.ImageField</span> <span class="pre">object&gt;,</span> <span class="pre">'name':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#ecommerce.forms.StoreForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#ecommerce.forms.StoreForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.forms.StoreForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#ecommerce.forms.StoreForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.models">
+<span id="ecommerce-models-module"></span><h2>ecommerce.models module<a class="headerlink" href="#module-ecommerce.models" title="Link to this heading"></a></h2>
+<p>Database models for the eCommerce application.</p>
+<p>Defines the core domain entities: vendor stores, the products they list,
+buyer orders and their line items, product reviews, and single-use tokens
+for the password reset flow.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.Order">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">Order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#Order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.Order" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A completed checkout. Line items are captured on OrderItem.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Order.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.Order.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Order.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.Order.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.buyer">
+<span class="sig-name descname"><span class="pre">buyer</span></span><a class="headerlink" href="#ecommerce.models.Order.buyer" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.buyer_id">
+<span class="sig-name descname"><span class="pre">buyer_id</span></span><a class="headerlink" href="#ecommerce.models.Order.buyer_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#ecommerce.models.Order.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Order.get_next_by_created_at">
+<span class="sig-name descname"><span class="pre">get_next_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Order.get_next_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Order.get_previous_by_created_at">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Order.get_previous_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.Order.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.items">
+<span class="sig-name descname"><span class="pre">items</span></span><a class="headerlink" href="#ecommerce.models.Order.items" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.Order.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Order.total">
+<span class="sig-name descname"><span class="pre">total</span></span><a class="headerlink" href="#ecommerce.models.Order.total" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">OrderItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#OrderItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.OrderItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A single product line on an order.</p>
+<p>product_name and price are stored as a snapshot at the time of purchase
+so that an order/invoice still reads correctly even if the vendor later
+renames or re-prices the product, or removes it from their store.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.line_total">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">line_total</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.line_total" title="Link to this definition"></a></dt>
+<dd><p>Total cost for this line item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The snapshot unit price multiplied by the quantity ordered.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Decimal</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.order">
+<span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.order" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.order_id">
+<span class="sig-name descname"><span class="pre">order_id</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.order_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.price">
+<span class="sig-name descname"><span class="pre">price</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.price" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.product">
+<span class="sig-name descname"><span class="pre">product</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.product" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.product_id">
+<span class="sig-name descname"><span class="pre">product_id</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.product_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.product_name">
+<span class="sig-name descname"><span class="pre">product_name</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.product_name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.OrderItem.quantity">
+<span class="sig-name descname"><span class="pre">quantity</span></span><a class="headerlink" href="#ecommerce.models.OrderItem.quantity" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.Product">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">Product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#Product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.Product" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A product that belongs to a single store.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Product.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.Product.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Product.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.Product.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Product.average_rating">
+<span class="sig-name descname"><span class="pre">average_rating</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#Product.average_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.Product.average_rating" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean rating across all reviews for this product.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The average rating rounded to one decimal place,
+or None if the product has no reviews yet.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#ecommerce.models.Product.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#ecommerce.models.Product.description" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Product.get_next_by_created_at">
+<span class="sig-name descname"><span class="pre">get_next_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Product.get_next_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Product.get_previous_by_created_at">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Product.get_previous_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.Product.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.image">
+<span class="sig-name descname"><span class="pre">image</span></span><a class="headerlink" href="#ecommerce.models.Product.image" title="Link to this definition"></a></dt>
+<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
+assigning the width/height to the width_field/height_field, if appropriate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#ecommerce.models.Product.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.Product.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.orderitem_set">
+<span class="sig-name descname"><span class="pre">orderitem_set</span></span><a class="headerlink" href="#ecommerce.models.Product.orderitem_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.price">
+<span class="sig-name descname"><span class="pre">price</span></span><a class="headerlink" href="#ecommerce.models.Product.price" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.reviews">
+<span class="sig-name descname"><span class="pre">reviews</span></span><a class="headerlink" href="#ecommerce.models.Product.reviews" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.stock">
+<span class="sig-name descname"><span class="pre">stock</span></span><a class="headerlink" href="#ecommerce.models.Product.stock" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.store">
+<span class="sig-name descname"><span class="pre">store</span></span><a class="headerlink" href="#ecommerce.models.Product.store" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Product.store_id">
+<span class="sig-name descname"><span class="pre">store_id</span></span><a class="headerlink" href="#ecommerce.models.Product.store_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">ResetToken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#ResetToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.ResetToken" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A single-use, time-limited token used for the forgot-password flow.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.expiry_date">
+<span class="sig-name descname"><span class="pre">expiry_date</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.expiry_date" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.get_next_by_expiry_date">
+<span class="sig-name descname"><span class="pre">get_next_by_expiry_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">expiry_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.ResetToken.get_next_by_expiry_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.get_previous_by_expiry_date">
+<span class="sig-name descname"><span class="pre">get_previous_by_expiry_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">expiry_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.ResetToken.get_previous_by_expiry_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.token">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.token" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.used">
+<span class="sig-name descname"><span class="pre">used</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.used" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.ResetToken.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#ecommerce.models.ResetToken.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.Review">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">Review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#Review"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.Review" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A buyer’s review of a product.</p>
+<p>A review is “verified” if the reviewing user has a completed order that
+contains the product being reviewed - otherwise it is “unverified”.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Review.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.Review.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Review.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.Review.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.comment">
+<span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#ecommerce.models.Review.comment" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#ecommerce.models.Review.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Review.get_next_by_created_at">
+<span class="sig-name descname"><span class="pre">get_next_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Review.get_next_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Review.get_previous_by_created_at">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Review.get_previous_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.Review.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.Review.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.product">
+<span class="sig-name descname"><span class="pre">product</span></span><a class="headerlink" href="#ecommerce.models.Review.product" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.product_id">
+<span class="sig-name descname"><span class="pre">product_id</span></span><a class="headerlink" href="#ecommerce.models.Review.product_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.rating">
+<span class="sig-name descname"><span class="pre">rating</span></span><a class="headerlink" href="#ecommerce.models.Review.rating" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#ecommerce.models.Review.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#ecommerce.models.Review.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Review.verified">
+<span class="sig-name descname"><span class="pre">verified</span></span><a class="headerlink" href="#ecommerce.models.Review.verified" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.models.Store">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.models.</span></span><span class="sig-name descname"><span class="pre">Store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/models.html#Store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.models.Store" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>A vendor’s storefront. A vendor may own more than one store.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Store.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#ecommerce.models.Store.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ecommerce.models.Store.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#ecommerce.models.Store.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#ecommerce.models.Store.created_at" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#ecommerce.models.Store.description" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Store.get_next_by_created_at">
+<span class="sig-name descname"><span class="pre">get_next_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Store.get_next_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ecommerce.models.Store.get_previous_by_created_at">
+<span class="sig-name descname"><span class="pre">get_previous_by_created_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">created_at&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ecommerce.models.Store.get_previous_by_created_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#ecommerce.models.Store.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.logo">
+<span class="sig-name descname"><span class="pre">logo</span></span><a class="headerlink" href="#ecommerce.models.Store.logo" title="Link to this definition"></a></dt>
+<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
+assigning the width/height to the width_field/height_field, if appropriate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#ecommerce.models.Store.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#ecommerce.models.Store.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.products">
+<span class="sig-name descname"><span class="pre">products</span></span><a class="headerlink" href="#ecommerce.models.Store.products" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.vendor">
+<span class="sig-name descname"><span class="pre">vendor</span></span><a class="headerlink" href="#ecommerce.models.Store.vendor" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.models.Store.vendor_id">
+<span class="sig-name descname"><span class="pre">vendor_id</span></span><a class="headerlink" href="#ecommerce.models.Store.vendor_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.serializers">
+<span id="ecommerce-serializers-module"></span><h2>ecommerce.serializers module<a class="headerlink" href="#module-ecommerce.serializers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.ProductSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.serializers.</span></span><span class="sig-name descname"><span class="pre">ProductSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/serializers.html#ProductSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.ProductSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialises a Product for the API. store/store_name are read-only for
+the same reason vendor is read-only on StoreSerializer - the store is
+taken from the URL and ownership is checked in the view.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.ProductSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/serializers.html#ProductSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.ProductSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ProductSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'store',</span> <span class="pre">'store_name',</span> <span class="pre">'name',</span> <span class="pre">'description',</span> <span class="pre">'price',</span> <span class="pre">'stock',</span> <span class="pre">'image',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.ProductSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ProductSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.serializers.ProductSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Product" title="ecommerce.models.Product"><code class="xref py py-class docutils literal notranslate"><span class="pre">Product</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ProductSerializer.Meta.read_only_fields">
+<span class="sig-name descname"><span class="pre">read_only_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'store',</span> <span class="pre">'store_name',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.ProductSerializer.Meta.read_only_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.ReviewSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.serializers.</span></span><span class="sig-name descname"><span class="pre">ReviewSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/serializers.html#ReviewSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.ReviewSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Read-only serialiser for reviews - reviews are only ever created via the website, not the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.ReviewSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/serializers.html#ReviewSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.ReviewSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ReviewSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'product',</span> <span class="pre">'username',</span> <span class="pre">'rating',</span> <span class="pre">'comment',</span> <span class="pre">'verified',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.ReviewSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ReviewSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.serializers.ReviewSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Review" title="ecommerce.models.Review"><code class="xref py py-class docutils literal notranslate"><span class="pre">Review</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.ReviewSerializer.Meta.read_only_fields">
+<span class="sig-name descname"><span class="pre">read_only_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'product',</span> <span class="pre">'username',</span> <span class="pre">'rating',</span> <span class="pre">'comment',</span> <span class="pre">'verified',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.ReviewSerializer.Meta.read_only_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.StoreSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ecommerce.serializers.</span></span><span class="sig-name descname"><span class="pre">StoreSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/serializers.html#StoreSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.StoreSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialises a Store for the API.</p>
+<p>vendor/vendor_username are read-only: the vendor is always taken from
+the authenticated request user in the view rather than trusted from
+the request body, so a vendor can never create a store “on behalf of”
+another user by tampering with the payload.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ecommerce.serializers.StoreSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/ecommerce/serializers.html#StoreSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.serializers.StoreSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.StoreSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'vendor',</span> <span class="pre">'vendor_username',</span> <span class="pre">'name',</span> <span class="pre">'description',</span> <span class="pre">'logo',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.StoreSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.StoreSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#ecommerce.serializers.StoreSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ecommerce.models.Store" title="ecommerce.models.Store"><code class="xref py py-class docutils literal notranslate"><span class="pre">Store</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ecommerce.serializers.StoreSerializer.Meta.read_only_fields">
+<span class="sig-name descname"><span class="pre">read_only_fields</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'vendor',</span> <span class="pre">'vendor_username',</span> <span class="pre">'created_at']</span></span><a class="headerlink" href="#ecommerce.serializers.StoreSerializer.Meta.read_only_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.tests">
+<span id="ecommerce-tests-module"></span><h2>ecommerce.tests module<a class="headerlink" href="#module-ecommerce.tests" title="Link to this heading"></a></h2>
+</section>
+<section id="module-ecommerce.urls">
+<span id="ecommerce-urls-module"></span><h2>ecommerce.urls module<a class="headerlink" href="#module-ecommerce.urls" title="Link to this heading"></a></h2>
+</section>
+<section id="module-ecommerce.utils">
+<span id="ecommerce-utils-module"></span><h2>ecommerce.utils module<a class="headerlink" href="#module-ecommerce.utils" title="Link to this heading"></a></h2>
+<p>Helper functions kept separate from views.py so the request/response
+handling in views.py stays easy to read. Mirrors the helper-function style
+used throughout the task material (e.g. change_user_password,
+generate_reset_url, build_email).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.add_to_cart">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">add_to_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#add_to_cart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.add_to_cart" title="Link to this definition"></a></dt>
+<dd><p>Add a quantity of a product to the session cart.</p>
+<p>If the product is already in the cart the quantities are combined rather
+than replaced. Product IDs are stored as strings because session data is
+serialised to JSON, which does not support integer keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The incoming request carrying the session.</p></li>
+<li><p><strong>product_id</strong> (<em>int</em>) – Primary key of the product being added.</p></li>
+<li><p><strong>quantity</strong> (<em>int</em>) – Number of units to add.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.announce_product">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">announce_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">product</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#announce_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.announce_product" title="Link to this definition"></a></dt>
+<dd><p>Post a tweet announcing a new product, following the same fail-safe approach as announce_store().</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.announce_store">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">announce_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#announce_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.announce_store" title="Link to this definition"></a></dt>
+<dd><p>Post a tweet announcing a new store. Never raises - a Twitter outage,
+missing credentials, or a declined authorisation must never stop a
+vendor from successfully creating a store.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.build_invoice_email">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">build_invoice_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#build_invoice_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.build_invoice_email" title="Link to this definition"></a></dt>
+<dd><p>Build (but do not send) an EmailMessage containing an order invoice.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.build_password_reset_email">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">build_password_reset_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#build_password_reset_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.build_password_reset_email" title="Link to this definition"></a></dt>
+<dd><p>Build (but do not send) the password reset email.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>User</em>) – The account requesting the reset.</p></li>
+<li><p><strong>reset_url</strong> (<em>str</em>) – Absolute URL the user must click.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An unsent message addressed to the user.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>EmailMessage</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.change_user_password">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">change_user_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#change_user_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.change_user_password" title="Link to this definition"></a></dt>
+<dd><p>Set a new password for the given username.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.clear_cart">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">clear_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#clear_cart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.clear_cart" title="Link to this definition"></a></dt>
+<dd><p>Empty the session cart, typically after a successful checkout.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.generate_reset_url">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">generate_reset_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#generate_reset_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.generate_reset_url" title="Link to this definition"></a></dt>
+<dd><p>Create a ResetToken for the user (valid for
+settings.PASSWORD_RESET_TIMEOUT_MINUTES) and return the absolute URL
+the user must click to reset their password.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.get_cart">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">get_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#get_cart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.get_cart" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the session cart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Product IDs mapped to quantities, empty if no cart exists.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.get_cart_items">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">get_cart_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#get_cart_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.get_cart_items" title="Link to this definition"></a></dt>
+<dd><p>Expand the session cart into full product records for template rendering.</p>
+<p>Products that no longer exist in the database are skipped, so a cart is
+not broken by a vendor deleting a product after it was added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Entries with <code class="docutils literal notranslate"><span class="pre">product</span></code>, <code class="docutils literal notranslate"><span class="pre">quantity</span></code> and <code class="docutils literal notranslate"><span class="pre">line_total</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.utils.remove_from_cart">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.utils.</span></span><span class="sig-name descname"><span class="pre">remove_from_cart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/utils.html#remove_from_cart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.utils.remove_from_cart" title="Link to this definition"></a></dt>
+<dd><p>Remove a product from the session cart entirely.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>HttpRequest</em>) – The incoming request carrying the session.</p></li>
+<li><p><strong>product_id</strong> (<em>int</em>) – Primary key of the product to remove.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ecommerce.views">
+<span id="ecommerce-views-module"></span><h2>ecommerce.views module<a class="headerlink" href="#module-ecommerce.views" title="Link to this heading"></a></h2>
+<p>View functions for the eCommerce application.</p>
+<p>Covers four areas: user registration and authentication; vendor management
+of stores and products; buyer browsing, reviews, cart and checkout; and the
+forgotten-password reset flow.</p>
+<p>Vendor and buyer capabilities are separated using Django’s permission
+framework, with ownership checks applied on top so that a vendor can only
+modify their own stores and products.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.add_review">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">add_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#add_review"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.add_review" title="Link to this definition"></a></dt>
+<dd><p>Save a buyer’s review of a product.</p>
+<p>The review is flagged as verified only when the reviewing user has an
+existing order containing this product; otherwise it is stored as
+unverified.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.cart_add">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">cart_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#cart_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.cart_add" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.cart_remove">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">cart_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#cart_remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.cart_remove" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.cart_view">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">cart_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#cart_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.cart_view" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.checkout">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">checkout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#checkout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.checkout" title="Link to this definition"></a></dt>
+<dd><p>Convert the session cart into a persisted Order.</p>
+<p>Runs inside a database transaction so that the order, its line items and
+the stock adjustments either all succeed or all roll back. Quantities are
+capped at available stock, prices and names are snapshotted onto each
+OrderItem, the cart is cleared, and an invoice email is sent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The checkout page, or a redirect to the new order.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.home">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">home</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.home" title="Link to this definition"></a></dt>
+<dd><p>Render the landing page with the eight most recently added products.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.login_user">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">login_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#login_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.login_user" title="Link to this definition"></a></dt>
+<dd><p>Authenticate a user and start a session.</p>
+<p>Honours a <code class="docutils literal notranslate"><span class="pre">next</span></code> parameter so users are returned to the page they were
+trying to reach before being asked to log in.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.logout_user">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">logout_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#logout_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.logout_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.my_orders">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">my_orders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#my_orders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.my_orders" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.my_stores">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">my_stores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#my_stores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.my_stores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.order_detail">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">order_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#order_detail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.order_detail" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.password_reset_confirm">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">password_reset_confirm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#password_reset_confirm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.password_reset_confirm" title="Link to this definition"></a></dt>
+<dd><p>Validate a reset token from an emailed link.</p>
+<p>The token is hashed before lookup, since only the hash is stored. Expired
+tokens are deleted. A valid token is held in the session for the
+subsequent password change step.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.password_reset_do">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">password_reset_do</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#password_reset_do"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.password_reset_do" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.password_reset_request">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">password_reset_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#password_reset_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.password_reset_request" title="Link to this definition"></a></dt>
+<dd><p>Email a password reset link to a registered address.</p>
+<p>The same confirmation message is shown whether or not the address matches
+an account, so the page cannot be used to discover which emails are
+registered.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.product_browse">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">product_browse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#product_browse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.product_browse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.product_create">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">product_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#product_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.product_create" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.product_delete">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">product_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#product_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.product_delete" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.product_detail">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">product_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#product_detail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.product_detail" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.product_edit">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">product_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#product_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.product_edit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.register_user">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">register_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#register_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.register_user" title="Link to this definition"></a></dt>
+<dd><p>Register a new buyer or vendor account.</p>
+<p>Creates the user via <code class="docutils literal notranslate"><span class="pre">create_user()</span></code> so the password is hashed, assigns
+them to the Group matching their chosen account type, and logs them in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>HttpRequest</em>) – The incoming request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The registration form, or a redirect home on success.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HttpResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.store_create">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">store_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#store_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.store_create" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.store_delete">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">store_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#store_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.store_delete" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.store_edit">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">store_edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#store_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.store_edit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ecommerce.views.store_products">
+<span class="sig-prename descclassname"><span class="pre">ecommerce.views.</span></span><span class="sig-name descname"><span class="pre">store_products</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ecommerce/views.html#store_products"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ecommerce.views.store_products" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-ecommerce">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ecommerce" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="ecommerce" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ecommerce.functions.html" class="btn btn-neutral float-right" title="ecommerce.functions package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nomfundo Shabangu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

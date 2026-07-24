@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecommerce.apps &mdash; GrabMore eCommerce 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GrabMore eCommerce
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">ecommerce</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GrabMore eCommerce</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ecommerce.apps</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecommerce.apps</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.apps</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.signals</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_migrate</span>
+
+
+<div class="viewcode-block" id="create_default_groups">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.apps.create_default_groups">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_default_groups</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set up the &#39;Vendors&#39; and &#39;Buyers&#39; groups with sensible default</span>
+<span class="sd">    permissions the first time migrations run, so that new installs of</span>
+<span class="sd">    this project have working authorisation out of the box.</span>
+
+<span class="sd">    Vendors get full add/change/delete/view permissions on Store and</span>
+<span class="sd">    Product (their inventory). Buyers get view permission on products and</span>
+<span class="sd">    add permission on reviews. Permissions are only a flag - views still</span>
+<span class="sd">    check request.user.has_perm(...) before allowing an action, and</span>
+<span class="sd">    ownership is always re-checked (a vendor may only edit their own</span>
+<span class="sd">    stores/products).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Permission</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.contenttypes.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentType</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Product</span><span class="p">,</span> <span class="n">Review</span><span class="p">,</span> <span class="n">Store</span>
+
+    <span class="n">store_ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">Store</span><span class="p">)</span>
+    <span class="n">product_ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">Product</span><span class="p">)</span>
+    <span class="n">review_ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">Review</span><span class="p">)</span>
+
+    <span class="n">vendors</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Vendors&quot;</span><span class="p">)</span>
+    <span class="n">vendor_permissions</span> <span class="o">=</span> <span class="n">Permission</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type__in</span><span class="o">=</span><span class="p">[</span><span class="n">store_ct</span><span class="p">,</span> <span class="n">product_ct</span><span class="p">])</span>
+    <span class="n">vendors</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">vendor_permissions</span><span class="p">)</span>
+
+    <span class="n">buyers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Buyers&quot;</span><span class="p">)</span>
+    <span class="n">buyer_permissions</span> <span class="o">=</span> <span class="n">Permission</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">content_type</span><span class="o">=</span><span class="n">product_ct</span><span class="p">,</span> <span class="n">codename__startswith</span><span class="o">=</span><span class="s2">&quot;view&quot;</span>
+    <span class="p">)</span> <span class="o">|</span> <span class="n">Permission</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="n">review_ct</span><span class="p">,</span> <span class="n">codename__startswith</span><span class="o">=</span><span class="s2">&quot;add&quot;</span><span class="p">)</span>
+    <span class="n">buyers</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">buyer_permissions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="EcommerceConfig">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.apps.EcommerceConfig">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EcommerceConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
+    <span class="n">default_auto_field</span> <span class="o">=</span> <span class="s2">&quot;django.db.models.BigAutoField&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;ecommerce&quot;</span>
+
+<div class="viewcode-block" id="EcommerceConfig.ready">
+<a class="viewcode-back" href="../../ecommerce.html#ecommerce.apps.EcommerceConfig.ready">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">post_migrate</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">create_default_groups</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Create the Tweet singleton (see functions/tweet.py) up front, but</span>
+        <span class="c1"># only when we are actually about to serve requests - never during</span>
+        <span class="c1"># `makemigrations`, `migrate`, `test`, `collectstatic`, etc., and</span>
+        <span class="c1"># only once under runserver&#39;s auto-reloader (which starts a watcher</span>
+        <span class="c1"># process in addition to the real server process).</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+        <span class="n">is_runserver</span> <span class="o">=</span> <span class="s2">&quot;runserver&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+        <span class="n">reloader_is_main_process</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RUN_MAIN&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">running_without_reloader</span> <span class="o">=</span> <span class="s2">&quot;--noreload&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+
+        <span class="k">if</span> <span class="n">is_runserver</span> <span class="ow">and</span> <span class="p">(</span><span class="n">reloader_is_main_process</span> <span class="ow">or</span> <span class="n">running_without_reloader</span><span class="p">):</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.functions.tweet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tweet</span>
+
+            <span class="n">Tweet</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nomfundo Shabangu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

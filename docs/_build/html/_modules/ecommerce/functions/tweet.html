@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ecommerce.functions.tweet &mdash; GrabMore eCommerce 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            GrabMore eCommerce
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">ecommerce</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">GrabMore eCommerce</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ecommerce.functions.tweet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ecommerce.functions.tweet</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A thin, defensive wrapper around the X (Twitter) API v2, used to announce</span>
+<span class="sd">new stores and new products.</span>
+
+<span class="sd">This follows the same three-legged OAuth1 flow (request token -&gt; user</span>
+<span class="sd">authorises -&gt; access token) shown in the task material, but with a few</span>
+<span class="sd">deliberate changes so it is safe to run inside a web application rather</span>
+<span class="sd">than a one-off script:</span>
+
+<span class="sd">- Credentials are read from Django settings (which in turn read them from</span>
+<span class="sd">  environment variables) instead of being hard-coded.</span>
+<span class="sd">- Every network call is wrapped so a Twitter outage, a missing/invalid</span>
+<span class="sd">  key, or a declined authorisation can never raise an exception into a</span>
+<span class="sd">  view and break store/product creation for the user - it is only ever</span>
+<span class="sd">  logged to the console.</span>
+<span class="sd">- authenticate() silently disables tweeting (rather than blocking forever</span>
+<span class="sd">  on input()) whenever it is not safe or not possible to prompt for a PIN</span>
+<span class="sd">  - e.g. missing credentials, or a non-interactive process such as the</span>
+<span class="sd">  Django test runner or `manage.py migrate`. See apps.py for the</span>
+<span class="sd">  additional guard that decides *when* authenticate() is even attempted.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">requests_oauthlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">OAuth1Session</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover - requests-oauthlib should always be installed</span>
+    <span class="n">OAuth1Session</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">REQUEST_TOKEN_URL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://api.twitter.com/oauth/request_token?oauth_callback=oob&amp;x_auth_access_type=write&quot;</span>
+<span class="p">)</span>
+<span class="n">AUTHORIZATION_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.twitter.com/oauth/authorize&quot;</span>
+<span class="n">ACCESS_TOKEN_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.twitter.com/oauth/access_token&quot;</span>
+<span class="n">TWEET_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.twitter.com/2/tweets&quot;</span>
+<span class="n">MEDIA_UPLOAD_URL</span> <span class="o">=</span> <span class="s2">&quot;https://upload.twitter.com/1.1/media/upload.json&quot;</span>
+
+
+<div class="viewcode-block" id="Tweet">
+<a class="viewcode-back" href="../../../ecommerce.functions.html#ecommerce.functions.tweet.Tweet">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tweet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Singleton (see __new__) wrapper that holds a single authenticated</span>
+<span class="sd">    OAuth1Session for the lifetime of the running process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] Creating the Tweet singleton.&quot;</span><span class="p">)</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Tweet</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">oauth</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Authentication</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="Tweet.authenticate">
+<a class="viewcode-back" href="../../../ecommerce.functions.html#ecommerce.functions.tweet.Tweet.authenticate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">consumer_key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;TWITTER_CONSUMER_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">consumer_secret</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;TWITTER_CONSUMER_SECRET&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">consumer_key</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">consumer_secret</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] No Twitter API credentials configured - tweeting is disabled.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">OAuth1Session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] requests-oauthlib is not installed - tweeting is disabled.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
+            <span class="c1"># We cannot prompt for a PIN from a non-interactive process (a</span>
+            <span class="c1"># test run, a management command, a background worker, etc.),</span>
+            <span class="c1"># so tweeting is simply left disabled for that run.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] Non-interactive process detected - tweeting is disabled for this run.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">oauth</span> <span class="o">=</span> <span class="n">OAuth1Session</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">client_secret</span><span class="o">=</span><span class="n">consumer_secret</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fetch_response</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">fetch_request_token</span><span class="p">(</span><span class="n">REQUEST_TOKEN_URL</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - never let auth crash the app</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Could not fetch a request token - tweeting is disabled (</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">resource_owner_key</span> <span class="o">=</span> <span class="n">fetch_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;oauth_token&quot;</span><span class="p">)</span>
+        <span class="n">resource_owner_secret</span> <span class="o">=</span> <span class="n">fetch_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;oauth_token_secret&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Got OAuth token: </span><span class="si">{</span><span class="n">resource_owner_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">authorization_url</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">authorization_url</span><span class="p">(</span><span class="n">AUTHORIZATION_URL</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Please go here and authorise: </span><span class="si">{</span><span class="n">authorization_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">verifier</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;[Tweet] Paste the PIN here (or press Enter to skip tweeting): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verifier</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] No PIN supplied - tweeting is disabled for this run.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">oauth</span> <span class="o">=</span> <span class="n">OAuth1Session</span><span class="p">(</span>
+            <span class="n">consumer_key</span><span class="p">,</span>
+            <span class="n">client_secret</span><span class="o">=</span><span class="n">consumer_secret</span><span class="p">,</span>
+            <span class="n">resource_owner_key</span><span class="o">=</span><span class="n">resource_owner_key</span><span class="p">,</span>
+            <span class="n">resource_owner_secret</span><span class="o">=</span><span class="n">resource_owner_secret</span><span class="p">,</span>
+            <span class="n">verifier</span><span class="o">=</span><span class="n">verifier</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">oauth_tokens</span> <span class="o">=</span> <span class="n">oauth</span><span class="o">.</span><span class="n">fetch_access_token</span><span class="p">(</span><span class="n">ACCESS_TOKEN_URL</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Could not fetch an access token - tweeting is disabled (</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">access_token</span> <span class="o">=</span> <span class="n">oauth_tokens</span><span class="p">[</span><span class="s2">&quot;oauth_token&quot;</span><span class="p">]</span>
+        <span class="n">access_token_secret</span> <span class="o">=</span> <span class="n">oauth_tokens</span><span class="p">[</span><span class="s2">&quot;oauth_token_secret&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">oauth</span> <span class="o">=</span> <span class="n">OAuth1Session</span><span class="p">(</span>
+            <span class="n">consumer_key</span><span class="p">,</span>
+            <span class="n">client_secret</span><span class="o">=</span><span class="n">consumer_secret</span><span class="p">,</span>
+            <span class="n">resource_owner_key</span><span class="o">=</span><span class="n">access_token</span><span class="p">,</span>
+            <span class="n">resource_owner_secret</span><span class="o">=</span><span class="n">access_token_secret</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] Twitter authentication complete - tweeting is enabled.&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Posting</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="Tweet.upload_media">
+<a class="viewcode-back" href="../../../ecommerce.functions.html#ecommerce.functions.tweet.Tweet.upload_media">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upload_media</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_field</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload an ImageFieldFile (a Store.logo or Product.image) to</span>
+<span class="sd">        Twitter&#39;s v1.1 media endpoint and return its media_id_string, or</span>
+<span class="sd">        None if there is no image, the upload fails, or we are not</span>
+<span class="sd">        authenticated. A missing/failed image upload never raises - the</span>
+<span class="sd">        caller falls back to a text-only tweet.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">oauth</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">image_field</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">image_field</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+            <span class="n">image_bytes</span> <span class="o">=</span> <span class="n">image_field</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">image_field</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oauth</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">MEDIA_UPLOAD_URL</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;media&quot;</span><span class="p">:</span> <span class="n">image_bytes</span><span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Media upload error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Media upload failed: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;media_id_string&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Tweet.make_tweet">
+<a class="viewcode-back" href="../../../ecommerce.functions.html#ecommerce.functions.tweet.Tweet.make_tweet">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_tweet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">image_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Post a tweet with the given text and, if provided, one attached</span>
+<span class="sd">        image. Always returns quietly (logging instead of raising) if</span>
+<span class="sd">        tweeting is unavailable, so a Twitter problem never breaks store</span>
+<span class="sd">        or product creation for the person using the site.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">oauth</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Tweet] Skipped tweet - Twitter is not authenticated.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">tweet</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
+        <span class="n">media_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upload_media</span><span class="p">(</span><span class="n">image_field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">media_id</span><span class="p">:</span>
+            <span class="n">tweet</span><span class="p">[</span><span class="s2">&quot;media&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;media_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">media_id</span><span class="p">]}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oauth</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">TWEET_URL</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">tweet</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Could not reach Twitter: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tweet] Request returned an error: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">json_response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_response</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">json_response</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Nomfundo Shabangu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
