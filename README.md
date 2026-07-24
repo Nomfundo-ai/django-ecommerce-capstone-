@@ -66,11 +66,13 @@ requirements.txt
    pip install -r requirements.txt
    ```
 
-   `mysqlclient` needs MySQL/MariaDB client development headers to build
-   (e.g. `libmariadb-dev` on Debian/Ubuntu, `mariadb-connector-c` via
-   Homebrew on macOS). If you just want to try the project quickly without
-   installing those headers, skip `mysqlclient` for now - the project runs
-   on SQLite by default (see below) with no extra setup.
+   The project uses **PyMySQL** as its MySQL driver, which is pure Python
+   and needs no compiler or client headers. The project runs on SQLite by
+   default (see below), so no database setup is required to get started.
+
+   **Python version:** target 3.12. Django 5.0 does not officially support
+   Python 3.14, on which the Django admin site fails to render. The
+   Dockerfile pins 3.12 accordingly.
 
 2. **Database.** By default the project uses SQLite (`db.sqlite3`), so it
    runs with zero extra configuration. To use MariaDB/MySQL as the task
@@ -107,6 +109,44 @@ requirements.txt
    ```
 
    Visit `http://127.0.0.1:8000/`.
+## Running with Docker
+
+The project ships with a `Dockerfile` so it can be built and run without
+installing Python or any dependencies locally.
+
+1. Build the image from the project root:
+
+```bash
+   docker build -t grabmore-ecommerce .
+```
+
+2. Run the container:
+
+```bash
+   docker run -p 8000:8000 grabmore-ecommerce
+```
+
+   Migrations are applied automatically on startup, so the app comes up
+   with a working database. Visit `http://localhost:8000/`.
+
+3. To create an admin user inside a running container:
+
+```bash
+   docker ps                                    # note the container ID
+   docker exec -it <container_id> python manage.py createsuperuser
+```
+
+### Passing secrets to the container
+
+No credentials are committed to this repository. Every secret is read from
+an environment variable with a safe default. To supply real values, create
+a `.env` file locally (it is excluded by `.gitignore`) and pass it in:
+
+```bash
+docker run -p 8000:8000 --env-file .env grabmore-ecommerce
+```
+
+A `.env` file for full functionality looks like:
 
 ## Email
 
@@ -185,9 +225,10 @@ variables unset disables tweeting with no other effect on the site.
   Note that `media/` is only served by Django itself while `DEBUG=True`;
   a production deployment needs a real static/media file server (e.g.
   nginx or a cloud storage backend) for uploaded logos/images.
-- Checkout currently floors stock at zero rather than rejecting an order
-  that exceeds available stock outright - a production version would
-  validate this before allowing checkout to proceed.
+- Checkout caps each line item at the available stock rather than
+  rejecting the order outright; a production version would validate this
+  before allowing checkout to proceed and tell the buyer why the quantity
+  changed.
 - The X (Twitter) OAuth1 "paste the PIN" flow is inherently a one-time,
   interactive, per-process setup step (see
   `Planning/6_third_party_api_integration.md`); a production deployment
