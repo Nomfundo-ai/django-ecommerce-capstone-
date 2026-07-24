@@ -66,6 +66,16 @@ def generate_reset_url(user, request):
 
 
 def build_password_reset_email(user, reset_url):
+    """
+    Build (but do not send) the password reset email.
+
+    Args:
+        user (User): The account requesting the reset.
+        reset_url (str): Absolute URL the user must click.
+
+    Returns:
+        EmailMessage: An unsent message addressed to the user.
+    """
     subject = "Password Reset"
     body = (
         f"Hi {user.username},\n\n"
@@ -96,10 +106,28 @@ def build_invoice_email(order):
 # ---------------------------------------------------------------------------
 
 def get_cart(request):
+    """
+    Retrieve the session cart.
+
+    Returns:
+        dict: Product IDs mapped to quantities, empty if no cart exists.
+    """
     return request.session.get("cart", {})
 
 
 def add_to_cart(request, product_id, quantity):
+    """
+    Add a quantity of a product to the session cart.
+
+    If the product is already in the cart the quantities are combined rather
+    than replaced. Product IDs are stored as strings because session data is
+    serialised to JSON, which does not support integer keys.
+
+    Args:
+        request (HttpRequest): The incoming request carrying the session.
+        product_id (int): Primary key of the product being added.
+        quantity (int): Number of units to add.
+    """
     cart = request.session.get("cart", {})
     product_id = str(product_id)
     current_quantity = int(cart.get(product_id, 0))
@@ -109,6 +137,13 @@ def add_to_cart(request, product_id, quantity):
 
 
 def remove_from_cart(request, product_id):
+    """
+    Remove a product from the session cart entirely.
+
+    Args:
+        request (HttpRequest): The incoming request carrying the session.
+        product_id (int): Primary key of the product to remove.
+    """
     cart = request.session.get("cart", {})
     cart.pop(str(product_id), None)
     request.session["cart"] = cart
@@ -116,12 +151,21 @@ def remove_from_cart(request, product_id):
 
 
 def clear_cart(request):
+    """Empty the session cart, typically after a successful checkout."""
     request.session["cart"] = {}
     request.session.modified = True
 
 
 def get_cart_items(request):
-    """Return a list of {product, quantity, line_total} for template rendering."""
+    """
+    Expand the session cart into full product records for template rendering.
+
+    Products that no longer exist in the database are skipped, so a cart is
+    not broken by a vendor deleting a product after it was added.
+
+    Returns:
+        list[dict]: Entries with ``product``, ``quantity`` and ``line_total``.
+    """
     cart = get_cart(request)
     items = []
     for product_id, quantity in cart.items():
