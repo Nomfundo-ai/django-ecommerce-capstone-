@@ -1,3 +1,15 @@
+"""
+View functions for the eCommerce application.
+
+Covers four areas: user registration and authentication; vendor management
+of stores and products; buyer browsing, reviews, cart and checkout; and the
+forgotten-password reset flow.
+
+Vendor and buyer capabilities are separated using Django's permission
+framework, with ownership checks applied on top so that a vendor can only
+modify their own stores and products.
+"""
+
 from hashlib import sha1
 
 from django.contrib import messages
@@ -40,11 +52,24 @@ from .utils import (
 # ---------------------------------------------------------------------------
 
 def home(request):
+    """Render the landing page with the eight most recently added products."""
     latest_products = Product.objects.select_related("store").order_by("-created_at")[:8]
     return render(request, "ecommerce/home.html", {"latest_products": latest_products})
 
 
 def register_user(request):
+    """
+    Register a new buyer or vendor account.
+
+    Creates the user via ``create_user()`` so the password is hashed, assigns
+    them to the Group matching their chosen account type, and logs them in.
+
+    Args:
+        request (HttpRequest): The incoming request.
+
+    Returns:
+        HttpResponse: The registration form, or a redirect home on success.
+    """
     if request.user.is_authenticated:
         return redirect("ecommerce:home")
 
@@ -75,6 +100,12 @@ def register_user(request):
 
 
 def login_user(request):
+    """
+    Authenticate a user and start a session.
+
+    Honours a ``next`` parameter so users are returned to the page they were
+    trying to reach before being asked to log in.
+    """
     if request.user.is_authenticated:
         return redirect("ecommerce:home")
 
@@ -131,6 +162,20 @@ def store_create(request):
 
 
 def _get_owned_store(request, store_id):
+    """
+    Fetch a store, ensuring the requesting user owns it.
+
+    Args:
+        request (HttpRequest): The incoming request.
+        store_id (int): Primary key of the store.
+
+    Returns:
+        Store: The requested store.
+
+    Raises:
+        Http404: If no store with that primary key exists.
+        PermissionDenied: If the store belongs to a different vendor.
+    """
     store = get_object_or_404(Store, pk=store_id)
     if store.vendor != request.user:
         raise PermissionDenied("You do not own this store.")
@@ -255,6 +300,13 @@ def product_detail(request, product_id):
 @login_required
 @permission_required("ecommerce.add_review", raise_exception=True)
 def add_review(request, product_id):
+    """
+    Save a buyer's review of a product.
+
+    The review is flagged as verified only when the reviewing user has an
+    existing order containing this product; otherwise it is stored as
+    unverified.
+    """
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":
         form = ReviewForm(request.POST)
@@ -308,6 +360,17 @@ def cart_remove(request, product_id):
 
 @login_required
 def checkout(request):
+    """
+    Convert the session cart into a persisted Order.
+
+    Runs inside a database transaction so that the order, its line items and
+    the stock adjustments either all succeed or all roll back. Quantities are
+    capped at available stock, prices and names are snapshotted onto each
+    OrderItem, the cart is cleared, and an invoice email is sent.
+
+    Returns:
+        HttpResponse: The checkout page, or a redirect to the new order.
+    """
     items = get_cart_items(request)
     if not items:
         messages.warning(request, "Your cart is empty.")
@@ -319,8 +382,10 @@ def checkout(request):
             total = 0
             for entry in items:
                 product = entry["product"]
-                quantity = min(entry["quantity"], product.stock) if product.stock else entry["quantity"]
-                quantity = entry["quantity"]
+# Never sell more units than the vendor has in stock.
+                quantity = min(entry["quantity"], product.stock)
+                if quantity < 1:
+                    continue
                 OrderItem.objects.create(
                     order=order,
                     product=product,
@@ -366,6 +431,13 @@ def my_orders(request):
 # ---------------------------------------------------------------------------
 
 def password_reset_request(request):
+    """
+    Email a password reset link to a registered address.
+
+    The same confirmation message is shown whether or not the address matches
+    an account, so the page cannot be used to discover which emails are
+    registered.
+    """
     if request.method == "POST":
         form = PasswordResetRequestForm(request.POST)
         if form.is_valid():
@@ -390,6 +462,13 @@ def password_reset_request(request):
 
 
 def password_reset_confirm(request, token):
+    """
+    Validate a reset token from an emailed link.
+
+    The token is hashed before lookup, since only the hash is stored. Expired
+    tokens are deleted. A valid token is held in the session for the
+    subsequent password change step.
+    """
     hashed = sha1(token.encode()).hexdigest()
     reset_token = ResetToken.objects.filter(token=hashed, used=False).first()
 
