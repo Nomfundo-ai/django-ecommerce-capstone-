@@ -1,3 +1,10 @@
+"""
+Database models for the eCommerce application.
+
+Defines the core domain entities: vendor stores, the products they list,
+buyer orders and their line items, product reviews, and single-use tokens
+for the password reset flow.
+"""
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -37,6 +44,13 @@ class Product(models.Model):
         return f"{self.name} ({self.store.name})"
 
     def average_rating(self):
+        """
+        Calculate the mean rating across all reviews for this product.
+
+        Returns:
+            float or None: The average rating rounded to one decimal place,
+            or None if the product has no reviews yet.
+        """
         reviews = self.reviews.all()
         if not reviews:
             return None
@@ -74,6 +88,12 @@ class OrderItem(models.Model):
 
     @property
     def line_total(self):
+        """
+        Total cost for this line item.
+
+        Returns:
+            Decimal: The snapshot unit price multiplied by the quantity ordered.
+        """
         return self.price * self.quantity
 
     def __str__(self):
